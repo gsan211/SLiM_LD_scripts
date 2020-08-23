@@ -1,0 +1,27 @@
+#SLiM code using synergistic epistasis between deleterious mutations rather than standard multiplicative fitness function
+
+initialize() {
+
+  initializeMutationRate(1e-6);
+	initializeMutationType("m2", 0.5, "f", 0); //initialize neutral mutations here so fitness isn't double calculated  by SLiM
+	m2.convertToSubstitution = F; //don't allow subs to occur so that synergistic epistasis can be properly tracked even if deleterious mutations fixed
+ 	initializeGenomicElementType("g1",m2, 1); 
+	initializeGenomicElement(g1, 0, 1000000);
+	initializeRecombinationRate(1e-8);
+
+}
+
+1 { sim.addSubpop("p1", 100000);
+	p1.setSelfingRate(0);
+}
+
+
+//negative synergistic epistasis function
+//synergism coefficient defined by ((count^2)*0.01), replace with any coefficient necessary
+fitness(NULL) {	
+  count = (individual.countOfMutationsOfType(m2));		
+		return exp(-(0.00005*count + ((count^2)*0.01)));
+}
+
+10000 late() { p1.outputVCFSample(100,F,'*',F,"slim_syn_epi"+o+".vcf");}
+
