@@ -1,0 +1,30 @@
+//slim script to explore effect of admixture with varying timing on differential LD buildup among deleterious and neutral mutations
+
+initialize() {
+
+  initializeMutationRate(1e-8);
+  initializeMutationType("m1", 0.5, "f", 0);
+	initializeMutationType("m2", 0.5, "f", -0.001);
+	m1.convertToSubstitution = T;
+ 	initializeGenomicElementType("g1", c(m1,m2) , c(0.01, 0.99) ); 
+	initializeGenomicElement(g1, 0, 1000000);
+	initializeRecombinationRate(1e-8);
+
+}
+
+1 {sim.addSubpop("p1", 100000);
+  sim.addSubpop("p2", 100000);
+  sim.addSubpop("p5", 100000);
+}
+
+
+//set timing of admixture here (gen where admixture starts)
+200000{ 
+p1.setMigrationRates(p2, 0.000001); //inter-population migration rates here
+p2.setMigrationRates(p1, 0.000001);
+p1.setMigrationRates(p5, 0.000001);
+p5.setMigrationRates(p1, 0.000001);
+}
+
+
+1500000 late() { p1.outputVCFSample(100,F,'*',F,"slim_subpop_ad200k_"+o+".vcf");}
