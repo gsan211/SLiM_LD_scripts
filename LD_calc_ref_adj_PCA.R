@@ -101,8 +101,10 @@ analyze  <- function(line_filename){
   burden_n=mean(colSums(mat_n), na.rm = T)
 
 
-
+  #summarize results in a string including average LD between selected/neutral mutations, average burden of each mutation type and tag for type of simualtion
   line2=(noquote(paste(netld_s, netld_n, burden_s, burden_n, "200k_ad")))
+                             
+  #output file for writing out results
   write(line2,file="/plas1/george.sandler/syn_epi/equal_pops/results_100k_netLD_admix_ref_adj_PCA_maflow.txt",append=TRUE)
 }
 
