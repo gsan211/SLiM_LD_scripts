@@ -1,7 +1,7 @@
 #file for running multiple parrallell SLiM simulations, uses "-o" option provided by SLiM to name output of SLiM simulation (vcf's mostly) replicates
 
 #define script to be used
-slim_file= slim_admixture_3pops.slim
+slim_file= slim_admixture_3pops.eidos
 
 #define directory where to write simulation output
 directory = "/plas1/george.sandler/syn_epi/equal_pops/slim_subpops_nov.txt"
